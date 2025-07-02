@@ -1,0 +1,56 @@
+// frontend/src/components/Scheduler/Scheduler.scss
+.scheduler-container {
+  font-family: sans-serif;
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+h2, h3 {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  margin-top: 30px;
+}
+
+.services-list, .time-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+
+  &:focus, &:active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+}
+
+.date-selector {
+  margin-top: 20px;
+  label {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+}
+
+.time-selector {
+  margin-top: 20px;
+}

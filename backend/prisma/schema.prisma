@@ -1,15 +1,72 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// 1. Define o gerador do Prisma Client, que traduz este schema para código TypeScript/JavaScript.
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
+// 2. Configura a conexão com o banco de dados.
+//    Certifique-se que a variavel DATABASE_URL no arquivo .env está configurada corretamente.
+//    Exemplo para PostgreSQL: DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+//    Exemplo para SQLite:     DATABASE_URL="file:./dev.db"
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+
+// ==========================================
+//          MODELOS DA APLICAÇÃO
+// ==========================================
+
+// Modelo para o usuário do sistema (o barbeiro)
+model User {
+  id        String   @id @default(cuid()) // ID único no formato CUID
+  email     String   @unique // Email de login, deve ser único
+  name      String
+  password  String   // ATENÇÃO: Armazenaremos a senha HASHED, nunca em texto puro
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Modelo para os serviços oferecidos pela barbearia
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  // O '?' indica que este campo é opcional
+  price       Decimal  // Usamos Decimal para valores monetários para evitar erros de arredondamento
+  durationInMinutes Int  // Duração do serviço em minutos, essencial para a lógica da agenda
+
+  // Relação: Um serviço pode estar em muitos agendamentos
+  appointments Appointment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Modelo para os agendamentos feitos pelos clientes
+model Appointment {
+  id            String   @id @default(cuid())
+  customerName  String   // Nome do cliente que agendou
+  customerPhone String   // Telefone/WhatsApp do cliente
+  date          DateTime // Data e hora exatas do agendamento
+
+  // Relação: Um agendamento pertence a um serviço específico
+  serviceId String  // Chave estrangeira para o modelo Service
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Modelo para horários que o barbeiro bloqueia manualmente (almoço, folga, etc)
+model BlockedTime {
+  id        String    @id @default(cuid())
+  startTime DateTime  // Início do período de bloqueio
+  endTime   DateTime  // Fim do período de bloqueio
+  reason    String?   // Motivo do bloqueio (opcional)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
