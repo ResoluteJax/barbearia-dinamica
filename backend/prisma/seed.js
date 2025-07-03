@@ -1,11 +1,25 @@
 // backend/prisma/seed.js
 const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  // Apaga todos os serviços existentes para evitar duplicatas ao rodar o seed várias vezes
+  // Limpa dados antigos
+  await prisma.appointment.deleteMany();
+  await prisma.user.deleteMany();
   await prisma.service.deleteMany();
-  console.log('Serviços antigos deletados.');
+  console.log('Dados antigos deletados.');
+
+  // Cria usuário barbeiro com senha hasheada
+  const hashedPassword = await bcrypt.hash('senha123', 10);
+  await prisma.user.create({
+    data: {
+      name: 'Barbeiro Admin',
+      email: 'admin@barbearia.com',
+      password: hashedPassword,
+    },
+  });
+  console.log('Usuário admin criado com sucesso.');
 
   // Cria novos serviços
   await prisma.service.createMany({

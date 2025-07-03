@@ -4,15 +4,16 @@ const cors = require('cors');
 require('dotenv').config();
 
 const apiRoutes = require('./routes/apiRoutes');
+const authRoutes = require('./routes/authRoutes'); // <-- Importe aqui
 
 const app = express();
 
-// Middlewares
-app.use(cors()); // Permite que o front-end acesse a API
-app.use(express.json()); // Permite que a API entenda requisições com corpo em JSON
+app.use(cors());
+app.use(express.json());
 
-// Rota principal da API
+// Rotas
 app.use('/api', apiRoutes);
+app.use('/api', authRoutes); // <-- Use aqui
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
