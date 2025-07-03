@@ -1,7 +1,11 @@
 // frontend/src/App.jsx
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Scheduler from './components/Scheduler/Scheduler';
-import './App.scss'; // Vamos criar este arquivo para estilos globais
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard'; // <-- Importe o Dashboard
+import ProtectedRoute from './components/auth/ProtectedRoute'; // <-- Importe a rota protegida
+import './App.scss';
 
 function App() {
   return (
@@ -10,7 +14,21 @@ function App() {
         <h1>Barbearia Dinâmica</h1>
       </header>
       <main>
-        <Scheduler />
+        <Routes>
+          {/* Rotas Públicas */}
+          <Route path="/" element={<Scheduler />} />
+          <Route path="/login" element={<Login />} />
+
+          {/* Rota Protegida */}
+          <Route 
+            path="/admin/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
       </main>
     </div>
   );

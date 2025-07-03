@@ -1,25 +1,21 @@
-// backend/src/controllers/appointmentController.js
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+// Função existente para criar agendamento
 const createAppointment = async (req, res) => {
   try {
     const { customerName, customerPhone, serviceId, date } = req.body;
 
-    // 1. Validação básica dos dados recebidos
     if (!customerName || !serviceId || !date) {
       return res.status(400).json({ message: 'Dados insuficientes para o agendamento.' });
     }
 
     const appointmentDate = new Date(date);
 
-    // 2. Validação da Lógica de Negócio
-    // Verifica se a data do agendamento não é no passado
     if (appointmentDate < new Date()) {
       return res.status(400).json({ message: 'Não é possível agendar em uma data passada.' });
     }
 
-    // Verifica se o horário já não está ocupado
     const existingAppointment = await prisma.appointment.findFirst({
       where: { date: appointmentDate },
     });
@@ -28,17 +24,15 @@ const createAppointment = async (req, res) => {
       return res.status(409).json({ message: 'Este horário já está ocupado.' });
     }
 
-    // 3. Criação do Agendamento no Banco
     const newAppointment = await prisma.appointment.create({
       data: {
         customerName,
         customerPhone,
         date: appointmentDate,
-        serviceId, // Conecta o agendamento ao serviço escolhido
+        serviceId,
       },
     });
 
-    // 4. Resposta de Sucesso
     res.status(201).json(newAppointment);
 
   } catch (error) {
@@ -47,6 +41,25 @@ const createAppointment = async (req, res) => {
   }
 };
 
+// Nova função para buscar todos os agendamentos (deve estar ANTES do module.exports)
+const getAllAppointments = async (req, res) => {
+  try {
+    const appointments = await prisma.appointment.findMany({
+      orderBy: {
+        date: 'asc',
+      },
+      include: {
+        service: true,
+      },
+    });
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar todos os agendamentos.' });
+  }
+};
+
+// Exporta AMBAS as funções
 module.exports = {
   createAppointment,
+  getAllAppointments,
 };
