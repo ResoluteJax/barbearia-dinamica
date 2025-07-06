@@ -1,0 +1,157 @@
+// frontend/src/components/Navbar/Navbar.scss
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.navbar {
+  background-color: var(--cor-fundo-secundario);
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 5px var(--sombra-card);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  color: var(--cor-texto-principal);
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  line-height: 1.1;
+}
+
+.brand-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  text-align: center;
+  gap: 2rem;
+}
+
+// Estilo para os links e botões da navegação
+.nav-links a, .logout-button {
+  color: var(--cor-texto-secundario);
+  text-decoration: none;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease-in-out;
+
+  // Alinha ícone e texto
+  display: flex;
+  align-items: center;
+  gap: 8px; // Espaço entre o ícone e o texto
+
+  &:hover {
+    color: $azul-destaque;
+  }
+  &.active {
+    color: var(--cor-texto-principal);
+    font-weight: bold;
+    border-bottom: 2px solid $azul-destaque;
+  }
+}
+
+.menu-icon {
+  display: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--cor-texto-principal);
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0.5rem 0; // Adiciona padding para alinhar com os links
+
+  // Remove a borda inferior do estado ativo que vem do seletor geral
+  &.active { 
+    border-bottom: none;
+  }
+}
+
+// Esconde o ThemeSwitcher em telas mobile para simplificar o menu
+.theme-switcher-li {
+  display: block;
+}
+
+// LÓGICA RESPONSIVA (Mobile-First)
+@media screen and (max-width: 960px) {
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; // Alinha os itens para ocuparem toda a largura
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 80px;
+    left: -100%;
+    opacity: 1;
+    transition: all 0.5s ease;
+    background: var(--cor-fundo-secundario);
+    padding: 0;
+    gap: 0; // Remove o gap horizontal
+  }
+
+  .nav-links.active {
+    left: 0;
+    opacity: 1;
+    transition: all 0.5s ease;
+    z-index: 1;
+  }
+
+  .nav-links li {
+    width: 100%;
+  }
+
+  .nav-links a, .logout-button {
+    text-align: center;
+    padding: 1.5rem; // Diminui o padding vertical
+    width: 100%;
+    display: flex;
+    justify-content: center; // Centraliza ícone e texto
+
+    // Remove a borda inferior no mobile
+    &.active {
+      border-bottom: none;
+      background-color: rgba(0, 123, 255, 0.1);
+    }
+  }
+
+  .logout-button {
+    font-size: 1.1rem; // Garante o tamanho da fonte
+  }
+
+  .menu-icon {
+    display: block;
+  }
+
+  // Esconde o ThemeSwitcher no menu mobile para uma lista mais limpa
+  .theme-switcher-li {
+    padding: 1.5rem;
+  }
+}

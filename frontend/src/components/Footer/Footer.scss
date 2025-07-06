@@ -1,0 +1,54 @@
+// frontend/src/components/Footer/Footer.scss
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.footer {
+  background-color: var(--cor-fundo-secundario);
+  color: var(--cor-texto-secundario);
+  padding-top: 40px;
+  margin-top: 50px;
+  box-shadow: 0 -2px 5px var(--sombra-card);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  gap: 30px;
+  grid-template-columns: 1fr; // Padrão de 1 coluna para mobile
+
+  @include tablet {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.address-section {
+  text-align: left;
+  h3 {
+    color: var(--cor-texto-principal);
+    margin-bottom: 15px;
+  }
+}
+
+// --- CORREÇÃO PRINCIPAL AQUI ---
+.map-section {
+  // Garante uma altura mínima para o container do mapa em qualquer tela
+  min-height: 250px; 
+}
+
+// Alvo direto no container que o Leaflet cria
+.leaflet-container {
+  height: 250px !important; // Força a altura do mapa
+  width: 100%;
+  border-radius: 8px;
+}
+// --- FIM DA CORREÇÃO ---
+
+.footer-bottom {
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  border-top: 1px solid var(--cor-borda);
+  font-size: 0.9rem;
+}

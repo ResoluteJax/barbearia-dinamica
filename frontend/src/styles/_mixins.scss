@@ -1,0 +1,14 @@
+// frontend/src/styles/_mixins.scss
+// A linha `@use 'variables' as *;` foi removida.
+
+@mixin tablet {
+  @media (min-width: 768px) { // É melhor usar o valor direto aqui
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) { // É melhor usar o valor direto aqui
+    @content;
+  }
+}

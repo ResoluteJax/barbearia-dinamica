@@ -38,3 +38,42 @@ export const loginUser = (credentials) => {
 export const getAdminAppointments = () => {
   return apiClient.get('/admin/appointments');
 };
+
+// Cria um novo agendamento (rota pública)
+export const createAppointment = (appointmentData) => {
+  return apiClient.post('/appointments', appointmentData);
+};
+// Busca todos os produtos (rota pública)
+export const getProducts = () => {
+  return apiClient.get('/products');
+};
+// Deleta um produto pelo ID (rota protegida, o interceptor adiciona o token)
+export const deleteProduct = (id) => {
+  return apiClient.delete(`/products/${id}`);
+};
+// Cria um novo produto enviando dados de formulário (incluindo imagem)
+export const createProduct = (formData) => {
+  return apiClient.post('/products', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+// --- Funções de Portfólio ---
+export const getPortfolioImages = () => {
+  return apiClient.get('/portfolio');
+};
+export const addPortfolioImage = (formData) => {
+  return apiClient.post('/portfolio', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+export const deletePortfolioImage = (id) => {
+  return apiClient.delete(`/portfolio/${id}`);
+};
+export const deleteAppointment = (id) => {
+  return apiClient.delete(`/admin/appointments/${id}`);
+};

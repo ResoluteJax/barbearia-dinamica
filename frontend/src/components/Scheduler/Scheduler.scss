@@ -1,13 +1,21 @@
-// frontend/src/components/Scheduler/Scheduler.scss
+@use 'sass:color';
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
 .scheduler-container {
-  font-family: sans-serif;
-  padding: 20px;
-  max-width: 800px;
-  margin: auto;
+  padding: 15px;
+  background-color: var(--cor-fundo-secundario);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px var(--sombra-card);
+  color: var(--cor-texto-principal);
+
+  @include tablet {
+    padding: 25px;
+  }
 }
 
 h2, h3 {
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--cor-borda);
   padding-bottom: 10px;
   margin-top: 30px;
 }
@@ -16,41 +24,129 @@ h2, h3 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: 15px;
+  justify-content: center;
 }
 
-button {
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.2s, color 0.2s;
-
-  &:hover {
-    background-color: #e0e0e0;
-  }
-
-  &:focus, &:active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
+.date-time-picker {
+  @include tablet {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
   }
 }
 
 .date-selector {
   margin-top: 20px;
+  flex: 1;
+
   label {
     margin-right: 10px;
     font-weight: bold;
   }
+
   input[type="date"] {
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--cor-borda);
     border-radius: 5px;
     font-size: 16px;
+    background-color: var(--cor-fundo-principal);
+    color: var(--cor-texto-principal);
+    
+    .dark-theme &::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
   }
 }
 
 .time-selector {
+  margin-top: 30px;
+  flex: 2;
+
+  @include tablet {
+    margin-top: 0;
+  }
+}
+
+button {
+  padding: 10px 15px;
+  border: 1px solid var(--cor-texto-secundario);
+  background-color: transparent;
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+
+  &:hover {
+    background-color: var(--cor-borda);
+    color: var(--cor-texto-principal);
+  }
+
+  &.selected, &:focus {
+    background-color: $azul-destaque;
+    color: $branco;
+    border-color: $azul-destaque;
+    outline: none;
+  }
+}
+
+p {
+  color: var(--cor-texto-secundario);
+}
+
+.customer-details {
+  margin-top: 40px;
+  border-top: 2px solid var(--cor-borda);
+  padding-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    // Outros estilos de input já devem ser herdados
+  }
+}
+
+.submit-booking-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #28a745; // Verde para confirmação
+  color: white;
+  border: none;
+
+  &:hover {
+    background-color: #218838;
+  }
+}
+
+// Estilos para mensagens de feedback
+.error-message, .success-message {
+  text-align: center;
   margin-top: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.error-message {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.success-message {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
 }

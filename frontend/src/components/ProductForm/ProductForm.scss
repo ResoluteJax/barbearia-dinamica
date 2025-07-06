@@ -1,0 +1,59 @@
+// frontend/src/components/ProductForm/ProductForm.scss
+.product-form {
+  background-color: var(--cor-fundo-secundario);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--cor-borda);
+  max-width: 600px;
+  margin: 20px auto;
+
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--cor-texto-principal);
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--cor-borda);
+    background-color: var(--cor-fundo-principal);
+    color: var(--cor-texto-principal);
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+
+    &:disabled {
+      background-color: #5a6268;
+      cursor: not-allowed;
+    }
+  }
+}

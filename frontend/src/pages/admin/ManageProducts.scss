@@ -1,0 +1,122 @@
+@use '../../styles/variables' as *;
+
+.manage-products-container {
+  h2 {
+    color: var(--cor-texto-principal);
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  & > p { // Estiliza o parágrafo que é filho direto do container
+    color: var(--cor-texto-secundario);
+    margin-bottom: 30px;
+    text-align: left;
+  }
+}
+
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--cor-fundo-secundario);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--cor-borda);
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 10px var(--sombra-card);
+  }
+
+  img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--cor-borda);
+  }
+
+  .product-info {
+    flex-grow: 1;
+    text-align: left;
+    h4 {
+      margin: 0 0 5px 0;
+      color: var(--cor-texto-principal);
+    }
+    p {
+      margin: 0;
+      color: var(--cor-texto-secundario);
+      font-weight: bold;
+    }
+  }
+
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #c82333;
+    }
+  }
+}
+
+.error-message {
+  color: #d93025;
+  font-weight: bold;
+}
+
+// frontend/src/pages/admin/ManageProducts.scss
+.header {
+  // Flexbox para o cabeçalho
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; // Permite quebrar linha em telas pequenas
+  gap: 15px;
+  margin-bottom: 30px; // A margem que separará da lista
+}
+
+.header-info {
+  text-align: left; // Alinha o H2 e o P à esquerda
+  flex-grow: 1; // Permite que esta área cresça
+}
+
+.header-info h2 {
+  margin: 0;
+  color: var(--cor-texto-principal);
+}
+
+.header-info p {
+  margin: 5px 0 0 0;
+  color: var(--cor-texto-secundario);
+}
+
+.add-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #218838;
+  }
+}
+
+// Ajusta o h2 para não ter margem inferior e atrapalhar o alinhamento
+.header h2 {
+  margin-bottom: 0;
+}

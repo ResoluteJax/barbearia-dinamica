@@ -1,0 +1,76 @@
+// frontend/src/components/ThemeSwitcher/ThemeSwitcher.scss
+@use '../../styles/variables' as *;
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  cursor: pointer;
+
+  // Esconde o checkbox padrão
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+}
+
+// O "trilho" do switch
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #aaaaaa;
+  border-radius: 34px;
+  transition: background-color 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5px;
+
+  // Os ícones dentro do trilho
+  .icon {
+    color: #fff;
+    transition: opacity 0.4s;
+  }
+  .sun {
+    opacity: 0;
+    color: #f0f2f5;
+  }
+  .moon {
+    opacity: 1;
+    color: #1c1e21;
+  }
+}
+
+// O círculo que desliza
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: rgb(249, 249, 249);
+  border-radius: 50%;
+  transition: transform 0.4s;
+}
+
+// Lógica para quando o switch está MARCADO (tema escuro)
+input:checked + .slider {
+  background-color: rgb(97, 97, 97);
+
+  .sun {
+    opacity: 1;
+  }
+  .moon {
+    opacity: 0;
+  }
+}
+
+input:checked + .slider::before {
+  transform: translateX(26px);
+}

@@ -70,3 +70,20 @@ model BlockedTime {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Product {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  price       Decimal
+  imageUrl    String    // Caminho para a imagem do produto
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model PortfolioImage {
+  id        String   @id @default(cuid())
+  title     String   // Um título para a foto, ex: "Corte Degradê Navalhado"
+  imageUrl  String   // Caminho para a imagem do corte
+  createdAt DateTime @default(now())
+}

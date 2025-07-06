@@ -1,10 +1,15 @@
-.App {
-  text-align: center;
-}
+@use './styles/variables' as *;
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--cor-fundo-secundario);
   padding: 20px;
-  color: white;
-  margin-bottom: 20px;
+  color: var(--cor-texto-principal);
+  text-align: center;
+  box-shadow: 0 2px 5px var(--sombra-card);
+}
+
+main {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
 }

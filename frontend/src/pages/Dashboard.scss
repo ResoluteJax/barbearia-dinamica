@@ -1,29 +1,103 @@
-// frontend/src/pages/Dashboard.scss
 .dashboard-container {
-  padding: 20px;
-  max-width: 900px;
-  margin: auto;
+  padding: 20px 0;
+  text-align: left;
+  
+  h2, h3 {
+    color: var(--cor-texto-principal);
+    margin-bottom: 20px;
+  }
 }
+
+.dashboard-nav {
+  margin-bottom: 40px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.nav-card {
+  display: block;
+  background-color: var(--cor-fundo-secundario);
+  padding: 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--cor-texto-principal);
+  border: 1px solid var(--cor-borda);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px var(--sombra-card);
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  p {
+    color: var(--cor-texto-secundario);
+    margin-bottom: 0;
+  }
+}
+
+.appointments-list-container {
+  margin-top: 30px;
+}
+
 .appointments-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
+
 .appointment-card {
-  border: 1px solid #ddd;
+  border: 1px solid var(--cor-borda);
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  h3 {
+  box-shadow: 0 2px 5px var(--sombra-card);
+  background-color: var(--cor-fundo-secundario);
+
+  h4 {
     margin-top: 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--cor-borda);
     padding-bottom: 10px;
+    color: var(--cor-texto-principal);
   }
   p {
     margin: 5px 0;
+    color: var(--cor-texto-secundario);
+  }
+  strong {
+    color: var(--cor-texto-principal);
   }
 }
+
 .error-message {
   color: #d93025;
   font-weight: bold;
+}
+
+// Adicione no final do arquivo Dashboard.scss
+.appointment-card {
+  // ... (estilos existentes)
+  position: relative; // Necessário para o botão
+  padding-bottom: 50px; // Espaço para o botão
+}
+
+.cancel-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #5a6268;
+  }
 }
