@@ -1,4 +1,3 @@
-// frontend/src/components/Navbar/Navbar.scss
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
@@ -51,17 +50,14 @@
   gap: 2rem;
 }
 
-// Estilo para os links e botões da navegação
 .nav-links a, .logout-button {
   color: var(--cor-texto-secundario);
   text-decoration: none;
   padding: 0.5rem 0;
   transition: color 0.2s ease-in-out;
-
-  // Alinha ícone e texto
   display: flex;
   align-items: center;
-  gap: 8px; // Espaço entre o ícone e o texto
+  gap: 8px;
 
   &:hover {
     color: $azul-destaque;
@@ -73,6 +69,19 @@
   }
 }
 
+.logout-button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0.5rem 0;
+
+  &.active {
+    border-bottom: none;
+  }
+}
+
 .menu-icon {
   display: none;
   font-size: 1.8rem;
@@ -80,78 +89,59 @@
   color: var(--cor-texto-principal);
 }
 
-.logout-button {
-  background: none;
-  border: none;
-  font-size: 1.1rem;
-  cursor: pointer;
-  font-family: inherit;
-  padding: 0.5rem 0; // Adiciona padding para alinhar com os links
-
-  // Remove a borda inferior do estado ativo que vem do seletor geral
-  &.active { 
-    border-bottom: none;
-  }
-}
-
-// Esconde o ThemeSwitcher em telas mobile para simplificar o menu
-.theme-switcher-li {
-  display: block;
-}
-
-// LÓGICA RESPONSIVA (Mobile-First)
+// Lógica de Responsividade
 @media screen and (max-width: 960px) {
   .nav-links {
     display: flex;
     flex-direction: column;
-    align-items: stretch; // Alinha os itens para ocuparem toda a largura
+    align-items: stretch;
     width: 100%;
     height: 100vh;
     position: absolute;
     top: 80px;
-    left: -100%;
+    left: -100%; // Começa escondido
     opacity: 1;
     transition: all 0.5s ease;
     background: var(--cor-fundo-secundario);
     padding: 0;
-    gap: 0; // Remove o gap horizontal
+    gap: 0;
   }
 
   .nav-links.active {
-    left: 0;
-    opacity: 1;
-    transition: all 0.5s ease;
-    z-index: 1;
+    left: 0; // Desliza para a tela
   }
 
   .nav-links li {
     width: 100%;
+    border-bottom: 1px solid var(--cor-borda);
+    &:last-child {
+      border-bottom: none;
+    }
   }
 
   .nav-links a, .logout-button {
     text-align: center;
-    padding: 1.5rem; // Diminui o padding vertical
+    padding: 1.5rem;
     width: 100%;
     display: flex;
-    justify-content: center; // Centraliza ícone e texto
-
-    // Remove a borda inferior no mobile
+    justify-content: center;
+    
     &.active {
       border-bottom: none;
       background-color: rgba(0, 123, 255, 0.1);
     }
   }
-
-  .logout-button {
-    font-size: 1.1rem; // Garante o tamanho da fonte
-  }
-
+  
   .menu-icon {
     display: block;
   }
 
-  // Esconde o ThemeSwitcher no menu mobile para uma lista mais limpa
+  
   .theme-switcher-li {
     padding: 1.5rem;
+    display: flex;
+    justify-content: center;
   }
+
+  
 }

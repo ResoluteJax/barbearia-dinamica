@@ -1,6 +1,7 @@
 // frontend/src/pages/ProductsPage.jsx
 import React, { useState, useEffect } from 'react';
 import { getProducts } from '../services/api';
+import { FaTag } from 'react-icons/fa'; // Importa o ícone de etiqueta
 import './ProductsPage.scss';
 
 const ProductsPage = () => {
@@ -23,25 +24,30 @@ const ProductsPage = () => {
     fetchProducts();
   }, []);
 
-  if (loading) return <p>Carregando produtos...</p>;
-  if (error) return <p className="error-message">{error}</p>;
+  if (loading) return <div className="products-page-container"><p>Carregando produtos...</p></div>;
+  if (error) return <p className="products-page-container error-message">{error}</p>;
 
   return (
     <div className="products-page-container">
-      <h2>Nossa Vitrine de Produtos</h2>
-      <p>Confira os produtos que usamos e recomendamos.</p>
+      <h2>Vitrine de Produtos</h2>
+      <p>Confira os produtos que usamos e recomendamos em nossos serviços.</p>
       <div className="products-grid">
         {products.map(product => (
           <div key={product.id} className="product-card-public">
-            <img 
-              src={`${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${product.imageUrl}`} 
-              alt={product.name} 
-              className="product-image"
-            />
+            <div className="product-image-wrapper">
+              <img 
+                src={`${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${product.imageUrl}`} 
+                alt={product.name} 
+                className="product-image"
+              />
+            </div>
             <div className="product-card-info">
               <h3>{product.name}</h3>
               <p className="product-description">{product.description}</p>
-              <p className="product-price">R$ {Number(product.price).toFixed(2).replace('.', ',')}</p>
+              <div className="product-price">
+                <FaTag /> {/* Adiciona o ícone aqui */}
+                <span>R$ {Number(product.price).toFixed(2).replace('.', ',')}</span>
+              </div>
             </div>
           </div>
         ))}

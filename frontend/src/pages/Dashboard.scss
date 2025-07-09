@@ -1,3 +1,5 @@
+@use '../styles/variables' as *; 
+@use '../styles/mixins' as *; 
 .dashboard-container {
   padding: 20px 0;
   text-align: left;
@@ -5,6 +7,29 @@
   h2, h3 {
     color: var(--cor-texto-principal);
     margin-bottom: 20px;
+  }
+}
+
+.pending-notification {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  border: 1px solid #ffc107;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(255, 193, 7, 0.3);
+  }
+
+  strong {
+    font-weight: 700;
   }
 }
 
@@ -16,88 +41,116 @@
 }
 
 .nav-card {
-  display: block;
   background-color: var(--cor-fundo-secundario);
   padding: 20px;
   border-radius: 8px;
   text-decoration: none;
-  color: var(--cor-texto-principal);
   border: 1px solid var(--cor-borda);
   transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px var(--sombra-card);
   }
+}
 
+.card-icon {
+  font-size: 3.5rem;
+  padding: 15px;
+  border-radius: 50%;
+}
+
+.card-text {
   h3 {
-    margin-top: 0;
+    color: var(--cor-texto-principal);
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
   }
-
   p {
     color: var(--cor-texto-secundario);
-    margin-bottom: 0;
+    margin: 0;
+    font-size: 0.9rem;
   }
 }
 
+.nav-card.products .card-icon {
+  background-color: rgba(0, 123, 255, 0.2);
+  color: #007bff;
+}
+.nav-card.portfolio .card-icon {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+.nav-card.reviews .card-icon {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+// --- ESTILOS ATUALIZADOS PARA A LISTA DE AGENDAMENTOS ---
 .appointments-list-container {
-  margin-top: 30px;
+  margin-top: 40px;
+  background-color: var(--cor-fundo-secundario);
+  border: 1px solid var(--cor-borda);
+  padding: 25px;
+  border-radius: 8px;
 }
 
 .appointments-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 15px;
 }
 
 .appointment-card {
-  border: 1px solid var(--cor-borda);
+  border-left: 5px solid $azul-destaque;
   padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px var(--sombra-card);
-  background-color: var(--cor-fundo-secundario);
+  border-radius: 4px;
+  background-color: var(--cor-fundo-principal);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
 
-  h4 {
-    margin-top: 0;
-    border-bottom: 1px solid var(--cor-borda);
-    padding-bottom: 10px;
-    color: var(--cor-texto-principal);
+.card-info-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--cor-texto-secundario);
+  margin: 5px 0;
+  
+  .info-icon {
+    color: $azul-destaque;
+    font-size: 1.1rem;
   }
-  p {
-    margin: 5px 0;
-    color: var(--cor-texto-secundario);
-  }
+
   strong {
     color: var(--cor-texto-principal);
+  }
+}
+
+.cancel-btn {
+  background-color: var(--cor-fundo-secundario);
+  border: 1px solid var(--cor-borda);
+  color: var(--cor-texto-secundario);
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
   }
 }
 
 .error-message {
   color: #d93025;
   font-weight: bold;
-}
-
-// Adicione no final do arquivo Dashboard.scss
-.appointment-card {
-  // ... (estilos existentes)
-  position: relative; // Necessário para o botão
-  padding-bottom: 50px; // Espaço para o botão
-}
-
-.cancel-btn {
-  position: absolute;
-  bottom: 10px;
-  right: 15px;
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  font-size: 0.8rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #5a6268;
-  }
 }

@@ -1,0 +1,72 @@
+// frontend/src/styles/_forms.scss
+@use 'variables' as *;
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--cor-texto-principal);
+  }
+}
+
+// Estilo base para todos os campos de texto e textareas
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--cor-borda);
+  background-color: var(--cor-fundo-principal);
+  color: var(--cor-texto-principal);
+  border-radius: 5px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: $azul-destaque;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  }
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+// Estilo base para botões de confirmação/ação principal
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background-color: $azul-destaque;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: darken($azul-destaque, 10%);
+  }
+
+  &:disabled {
+    background-color: #5a6268;
+    cursor: not-allowed;
+  }
+}
+
+.dark-theme {
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}

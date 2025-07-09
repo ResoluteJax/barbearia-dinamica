@@ -1,4 +1,3 @@
-// frontend/src/pages/admin/ManagePortfolio.jsx
 import React, { useState, useEffect } from 'react';
 import { getPortfolioImages, addPortfolioImage, deletePortfolioImage } from '../../services/api';
 import './ManagePortfolio.scss';
@@ -16,6 +15,7 @@ const ManagePortfolio = () => {
       setImages(response.data);
     } catch (err) {
       setError('Falha ao carregar imagens do portfólio.');
+      console.error(err);
     }
   };
 
@@ -38,12 +38,16 @@ const ManagePortfolio = () => {
 
     try {
       const response = await addPortfolioImage(formData);
-      setImages([response.data, ...images]); // Adiciona a nova imagem no início da lista
+      setImages([response.data, ...images]);
       setTitle('');
       setFile(null);
-      document.getElementById('image-upload-input').value = null; // Limpa o input de arquivo
+      // Limpa o campo de input de arquivo visualmente
+      if (document.getElementById('image-upload-input')) {
+        document.getElementById('image-upload-input').value = null;
+      }
     } catch (err) {
       setError('Falha ao adicionar imagem.');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -56,6 +60,7 @@ const ManagePortfolio = () => {
         setImages(images.filter(img => img.id !== imageId));
       } catch (err) {
         setError('Falha ao deletar imagem.');
+        console.error(err);
       }
     }
   };
@@ -63,7 +68,7 @@ const ManagePortfolio = () => {
   return (
     <div className="manage-portfolio-container">
       <h2>Gerenciar Portfólio de Cortes</h2>
-
+      
       <form onSubmit={handleSubmit} className="upload-form">
         <h3>Adicionar Nova Foto</h3>
         <div className="form-group">
@@ -74,17 +79,27 @@ const ManagePortfolio = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Ex: Degradê Navalhado com Risco"
+            required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="image-upload-input">Arquivo da Imagem</label>
-          <input 
-            type="file" 
-            id="image-upload-input"
-            onChange={(e) => setFile(e.target.files[0])}
-          />
+          <label>Arquivo da Imagem</label>
+          <div className="file-upload-wrapper">
+            <label htmlFor="image-upload-input" className="file-upload-label">
+              Escolher Arquivo
+            </label>
+            <input 
+              type="file" 
+              id="image-upload-input"
+              onChange={(e) => setFile(e.target.files[0])}
+              required
+            />
+            <span className="file-name">
+              {file ? file.name : 'Nenhum arquivo escolhido'}
+            </span>
+          </div>
         </div>
-        <button type="submit" disabled={loading}>
+        <button type="submit" className="submit-button" disabled={loading}>
           {loading ? 'Enviando...' : 'Adicionar ao Portfólio'}
         </button>
         {error && <p className="error-message">{error}</p>}
@@ -96,7 +111,7 @@ const ManagePortfolio = () => {
             <img src={`${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${image.imageUrl}`} alt={image.title} />
             <div className="overlay">
               <p>{image.title}</p>
-              <button onClick={() => handleDelete(image.id)}>Deletar</button>
+              <button onClick={() => handleDelete(image.id)} className="delete-btn-overlay">Deletar</button>
             </div>
           </div>
         ))}

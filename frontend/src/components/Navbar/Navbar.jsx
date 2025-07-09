@@ -1,29 +1,30 @@
 // frontend/src/components/Navbar/Navbar.jsx
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-// Importa todos os ícones que vamos usar
+import { useAuth } from '../../context/AuthContext';
 import { FaBars, FaTimes, FaCalendarCheck, FaShoppingBag, FaImages, FaTachometerAlt, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import './Navbar.scss';
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('authToken'));
+  const { isLoggedIn, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      setIsLoggedIn(!!localStorage.getItem('authToken'));
+    const handleResize = () => {
+      if (window.innerWidth > 960) {
+        setMenuOpen(false);
+      }
     };
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    setIsLoggedIn(false);
+    logout();
     setMenuOpen(false);
     navigate('/login');
   };
@@ -62,6 +63,7 @@ const Navbar = () => {
           </li>
           {isLoggedIn ? (
             <>
+              {/* A classe 'nav-item-mobile' foi REMOVIDA daqui */}
               <li>
                 <NavLink to="/admin/dashboard" className={({ isActive }) => (isActive ? 'active' : '')} onClick={closeMenu}>
                   <FaTachometerAlt /> <span>Dashboard</span>

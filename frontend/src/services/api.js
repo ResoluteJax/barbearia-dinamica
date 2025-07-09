@@ -1,79 +1,60 @@
-// frontend/src/services/api.js
 import axios from 'axios';
 import { format } from 'date-fns';
 
 const apiClient = axios.create({
-baseURL: import.meta.env.VITE_API_BASE_URL,
-headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
 });
 
 apiClient.interceptors.request.use(
   (config) => {
-    // Pega o token do localStorage
     const token = localStorage.getItem('authToken');
-    // Se o token existir, adiciona-o ao header de Authorization
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-
-export const getServices = () => {
-  return apiClient.get('/services');
-};
-export const getAvailability = (date) => {
+// Funções de Agendamento e Serviços
+export const getServices = () => apiClient.get('/services');
+export const getAvailability = (date, duration) => {
   const formattedDate = format(date, 'yyyy-MM-dd');
-  return apiClient.get(`/availability?date=${formattedDate}`);
+  return apiClient.get(`/availability?date=${formattedDate}&serviceDuration=${duration}`);
 };
-export const loginUser = (credentials) => {
-  return apiClient.post('/auth/login', credentials);
-};
-export const getAdminAppointments = () => {
-  return apiClient.get('/admin/appointments');
-};
+export const createAppointment = (appointmentData) => apiClient.post('/appointments', appointmentData);
 
-// Cria um novo agendamento (rota pública)
-export const createAppointment = (appointmentData) => {
-  return apiClient.post('/appointments', appointmentData);
-};
-// Busca todos os produtos (rota pública)
-export const getProducts = () => {
-  return apiClient.get('/products');
-};
-// Deleta um produto pelo ID (rota protegida, o interceptor adiciona o token)
-export const deleteProduct = (id) => {
-  return apiClient.delete(`/products/${id}`);
-};
-// Cria um novo produto enviando dados de formulário (incluindo imagem)
+// Função de Autenticação
+export const loginUser = (credentials) => apiClient.post('/auth/login', credentials);
+
+// Funções de Admin
+export const getAdminAppointments = () => apiClient.get('/admin/appointments');
+export const deleteAppointment = (id) => apiClient.delete(`/admin/appointments/${id}`);
+
+// Funções de Produtos
+export const getProducts = () => apiClient.get('/products');
+export const deleteProduct = (id) => apiClient.delete(`/products/${id}`);
 export const createProduct = (formData) => {
   return apiClient.post('/products', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
 };
 
-// --- Funções de Portfólio ---
-export const getPortfolioImages = () => {
-  return apiClient.get('/portfolio');
-};
+// Funções de Portfólio
+export const getPortfolioImages = () => apiClient.get('/portfolio');
 export const addPortfolioImage = (formData) => {
   return apiClient.post('/portfolio', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
 };
-export const deletePortfolioImage = (id) => {
-  return apiClient.delete(`/portfolio/${id}`);
-};
-export const deleteAppointment = (id) => {
-  return apiClient.delete(`/admin/appointments/${id}`);
+export const deletePortfolioImage = (id) => apiClient.delete(`/portfolio/${id}`);
+
+// Funções de Avaliação
+export const getApprovedReviews = () => apiClient.get('/reviews');
+export const createReview = (reviewData) => apiClient.post('/reviews', reviewData);
+export const getAdminReviews = (status = '') => apiClient.get(`/admin/reviews?status=${status}`);
+export const updateReviewStatus = (id, status) => apiClient.put(`/admin/reviews/${id}`, { status });
+export const getPendingReviewCount = () => {
+  return apiClient.get('/admin/reviews/pending-count');
 };

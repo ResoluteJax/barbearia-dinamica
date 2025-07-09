@@ -6,26 +6,33 @@ const prisma = new PrismaClient();
 
 const createAppointment = async (req, res) => {
   try {
+    console.log("1. Rota POST /appointments iniciada.");
     const { customerName, customerPhone, serviceId, date } = req.body;
 
     if (!customerName || !serviceId || !date) {
-      return res.status(400).json({ message: 'Dados insuficientes para o agendamento.' });
+      return res.status(400).json({ message: 'Dados insuficientes.' });
     }
 
     const appointmentDate = new Date(date);
 
+    /* --- VALIDAÇÃO TEMPORARIAMENTE DESATIVADA PARA TESTE ---
     if (appointmentDate < new Date()) {
       return res.status(400).json({ message: 'Não é possível agendar em uma data passada.' });
     }
+    */
 
+    console.log("2. Buscando por agendamentos existentes...");
     const existingAppointment = await prisma.appointment.findFirst({
       where: { date: appointmentDate },
     });
+    console.log("3. Busca por agendamentos existentes concluída.");
 
     if (existingAppointment) {
+      console.log("4. Horário já ocupado. Retornando erro 409.");
       return res.status(409).json({ message: 'Este horário já está ocupado.' });
     }
 
+    console.log("5. Criando novo agendamento no banco de dados...");
     const newAppointment = await prisma.appointment.create({
       data: {
         customerName,
@@ -37,24 +44,15 @@ const createAppointment = async (req, res) => {
         service: true,
       },
     });
+    console.log("6. Agendamento criado com sucesso no banco.");
 
-    // Lógica de Notificação
-    try {
-      const barberNumber = process.env.BARBER_WHATSAPP_NUMBER;
-      const formattedDate = format(newAppointment.date, "dd/MM/yyyy 'às' HH:mm");
-      const messageBody = `*Novo Agendamento na D'Castro Barbearia!* 🔔\n\n*Cliente:* ${newAppointment.customerName}\n*Serviço:* ${newAppointment.service.name}\n*Data:* ${formattedDate}`;
+    /* --- LÓGICA DE NOTIFICAÇÃO DESATIVADA --- */
 
-      if (barberNumber) { // Envia apenas se o número do barbeiro estiver configurado
-        await sendWhatsAppNotification(barberNumber, messageBody);
-      }
-    } catch (notificationError) {
-      console.error('Agendamento criado, mas a notificação falhou:', notificationError);
-    }
-
+    console.log("7. Enviando resposta 201 para o cliente.");
     res.status(201).json(newAppointment);
 
   } catch (error) {
-    console.error('Erro ao criar agendamento:', error);
+    console.error('ERRO GERAL em createAppointment:', error);
     res.status(500).json({ message: 'Erro interno ao criar agendamento.', error: error.message });
   }
 };

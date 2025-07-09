@@ -87,3 +87,18 @@ model PortfolioImage {
   imageUrl  String   // Caminho para a imagem do corte
   createdAt DateTime @default(now())
 }
+
+model Review {
+  id        String   @id @default(cuid())
+  customerName String
+  rating    Int      // Nota de 1 a 5
+  comment   String?  // Comentário opcional
+  status    ReviewStatus @default(PENDING) // Status padrão
+  createdAt DateTime @default(now())
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}

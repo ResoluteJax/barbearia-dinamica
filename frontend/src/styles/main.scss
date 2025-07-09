@@ -1,4 +1,8 @@
 @use 'variables' as *;
+@use 'sass:color';
+@use 'variables' as *;
+@use './forms';
+
 
 // Reset Básico
 *,
@@ -22,7 +26,7 @@ body {
   --cor-fundo-secundario: #{$preto-secundario};
   --cor-texto-principal: #{$branco};
   --cor-texto-secundario: #{$cinza-claro};
-  --cor-borda: #{darken($cinza-claro, 50%)};
+  --cor-borda: #{color.adjust($cinza-claro, $lightness: -50%)};
   --sombra-card: rgba(0, 0, 0, 0.3);
 }
 

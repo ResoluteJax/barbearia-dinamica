@@ -1,138 +1,223 @@
 @use 'sass:color';
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
+@use '../../styles/forms';
 
-.scheduler-container {
-  padding: 15px;
+.scheduler-container.modern {
+  padding: 20px;
   background-color: var(--cor-fundo-secundario);
   border-radius: 8px;
   box-shadow: 0 4px 10px var(--sombra-card);
   color: var(--cor-texto-principal);
+  position: relative;
+  
+  .form-wrapper {
+    overflow: hidden;
+  }
 
-  @include tablet {
-    padding: 25px;
+  form {
+    display: flex;
+    width: 300%;
+    transition: transform 0.4s ease-in-out;
   }
 }
 
-h2, h3 {
-  border-bottom: 2px solid var(--cor-borda);
-  padding-bottom: 10px;
-  margin-top: 30px;
+.scheduler-container.modern[data-step="1"] form { transform: translateX(0%); }
+.scheduler-container.modern[data-step="2"] form { transform: translateX(-33.333%); }
+.scheduler-container.modern[data-step="3"] form { transform: translateX(-66.666%); }
+
+.step-content {
+  width: 33.333%;
+  padding: 0 15px;
+  flex-shrink: 0;
+}
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 10px 40px 10px;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--cor-borda);
+    transform: translateY(-50%);
+    z-index: 0;
+  }
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+  background-color: var(--cor-fundo-secundario);
+  padding: 0 10px;
+
+  .step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--cor-fundo-principal);
+    border: 2px solid var(--cor-borda);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+    color: var(--cor-texto-secundario);
+  }
+
+  .step-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--cor-texto-secundario);
+    transition: all 0.3s;
+  }
+
+  &.active .step-icon {
+    background-color: $azul-destaque;
+    color: $branco;
+    border-color: $azul-destaque;
+  }
+
+  &.active .step-label {
+    color: var(--cor-texto-principal);
+  }
+}
+
+.back-button-wrapper {
+  height: 30px;
+  margin-bottom: 20px;
+  text-align: left;
+  padding-left: 15px;
+}
+
+.back-button {
+  background: var(--cor-fundo-principal);
+  border: 1px solid var(--cor-borda);
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.2s;
+  z-index: 2;
+
+  &:hover {
+    background-color: var(--cor-borda);
+    color: var(--cor-texto-principal);
+  }
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .services-list, .time-slots {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 15px;
   justify-content: center;
 }
 
-.date-time-picker {
-  @include tablet {
+.services-list {
+  flex-direction: column;
+  button {
+    text-align: left;
+    padding: 15px;
     display: flex;
-    gap: 40px;
-    align-items: flex-start;
-  }
-}
-
-.date-selector {
-  margin-top: 20px;
-  flex: 1;
-
-  label {
-    margin-right: 10px;
-    font-weight: bold;
-  }
-
-  input[type="date"] {
-    padding: 8px;
-    border: 1px solid var(--cor-borda);
-    border-radius: 5px;
-    font-size: 16px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
     background-color: var(--cor-fundo-principal);
+    border: 1px solid var(--cor-borda);
     color: var(--cor-texto-principal);
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: all 0.2s;
+
+    span {
+      color: var(--cor-texto-secundario);
+    }
     
-    .dark-theme &::-webkit-calendar-picker-indicator {
-      filter: invert(1);
+    &:hover:not(.selected) {
+      border-color: $azul-destaque;
+      background-color: var(--cor-fundo-principal);
+    }
+    
+    &.selected {
+      border-color: $azul-destaque;
+      background-color: color.adjust($azul-destaque, $lightness: 5%);
+      color: $branco;
+      font-weight: bold;
+      span { color: $branco; }
     }
   }
 }
 
-.time-selector {
-  margin-top: 30px;
-  flex: 2;
-
-  @include tablet {
-    margin-top: 0;
-  }
-}
-
-button {
+.time-slots button {
   padding: 10px 15px;
-  border: 1px solid var(--cor-texto-secundario);
+  border: 1px solid var(--cor-borda);
   background-color: transparent;
   color: var(--cor-texto-secundario);
   cursor: pointer;
   border-radius: 5px;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-
-  &:hover {
-    background-color: var(--cor-borda);
-    color: var(--cor-texto-principal);
+  transition: all 0.2s;
+  
+  &:hover:not(:disabled) {
+    border-color: $azul-destaque;
+    color: $azul-destaque;
   }
-
-  &.selected, &:focus {
+  
+  &.selected {
     background-color: $azul-destaque;
     color: $branco;
     border-color: $azul-destaque;
-    outline: none;
-  }
-}
-
-p {
-  color: var(--cor-texto-secundario);
-}
-
-.customer-details {
-  margin-top: 40px;
-  border-top: 2px solid var(--cor-borda);
-  padding-top: 20px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-  text-align: left;
-
-  label {
-    display: block;
-    margin-bottom: 8px;
     font-weight: bold;
   }
 
-  input {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    // Outros estilos de input já devem ser herdados
+  // Horários PASSADOS
+  &.disabled-past {
+    background-color: #e67e22;
+    color: white;
+    opacity: 0.6;
+    cursor: not-allowed;
+    border-color: transparent;
+  }
+  
+  // Horários OCUPADOS
+  &.disabled-unavailable {
+    background-color: var(--cor-borda);
+    color: var(--cor-texto-secundario);
+    text-decoration: line-through;
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: transparent;
   }
 }
 
-.submit-booking-btn {
-  width: 100%;
-  padding: 15px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  background-color: #28a745; // Verde para confirmação
-  color: white;
-  border: none;
+.submit-button {
+  @extend .submit-button;
+  background-color: #28a745;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: #218838;
   }
 }
 
-// Estilos para mensagens de feedback
 .error-message, .success-message {
   text-align: center;
   margin-top: 20px;

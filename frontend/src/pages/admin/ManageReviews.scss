@@ -1,0 +1,50 @@
+// frontend/src/pages/admin/ManageReviews.scss
+.manage-reviews-container {
+  // ... (estilos similares aos de outras páginas de admin)
+}
+
+.reviews-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.review-card {
+  background-color: var(--cor-fundo-secundario);
+  padding: 20px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  text-align: left;
+
+  h4 {
+    margin: 0 0 10px 0;
+  }
+
+  .star-rating-display {
+    margin-bottom: 15px;
+  }
+
+  .comment {
+    font-style: italic;
+    color: var(--cor-texto-secundario);
+    padding-left: 15px;
+    border-left: 3px solid var(--cor-borda);
+  }
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+
+  button {
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+  }
+  .approve-btn { background-color: #28a745; }
+  .reject-btn { background-color: #dc3545; }
+}

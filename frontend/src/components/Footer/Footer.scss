@@ -21,6 +21,10 @@
   @include tablet {
     grid-template-columns: 1fr 2fr;
   }
+    // Em telas de desktop, muda para 3 colunas
+  @include desktop {
+    grid-template-columns: 1fr 1.5fr 1fr; // Endereço | Mapa (maior) | Avaliação
+  }
 }
 
 .address-section {
@@ -31,7 +35,7 @@
   }
 }
 
-// --- CORREÇÃO PRINCIPAL AQUI ---
+
 .map-section {
   // Garante uma altura mínima para o container do mapa em qualquer tela
   min-height: 250px; 
@@ -42,8 +46,9 @@
   height: 250px !important; // Força a altura do mapa
   width: 100%;
   border-radius: 8px;
+  z-index: 0;
 }
-// --- FIM DA CORREÇÃO ---
+
 
 .footer-bottom {
   text-align: center;
@@ -52,3 +57,5 @@
   border-top: 1px solid var(--cor-borda);
   font-size: 0.9rem;
 }
+
+

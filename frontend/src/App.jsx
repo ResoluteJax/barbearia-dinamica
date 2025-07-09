@@ -4,14 +4,11 @@ import Navbar from './components/Navbar/Navbar';
 import Scheduler from './components/Scheduler/Scheduler';
 import Login from './pages/Login';
 import ProductsPage from './pages/ProductsPage';
-
 import PortfolioPage from './pages/PortfolioPage';
-
 import Dashboard from './pages/Dashboard';
 import ManageProducts from './pages/admin/ManageProducts';
-
 import ManagePortfolio from './pages/admin/ManagePortfolio';
-
+import ManageReviews from './pages/admin/ManageReviews';
 import AddProduct from './pages/admin/AddProduct';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import './App.scss';
@@ -37,24 +34,26 @@ function App() {
             path="/admin/dashboard" 
             element={ <ProtectedRoute><Dashboard /></ProtectedRoute> } 
           />
-
           <Route 
             path="/admin/products" 
             element={ <ProtectedRoute><ManageProducts /></ProtectedRoute> } 
           />
-
           <Route 
             path="/admin/products/new" 
             element={ <ProtectedRoute><AddProduct /></ProtectedRoute> } 
           />
-          
           <Route 
             path="/admin/portfolio" 
             element={ <ProtectedRoute><ManagePortfolio /></ProtectedRoute> } 
           />
-
+          <Route 
+            path="/admin/reviews" 
+            element={ <ProtectedRoute><ManageReviews /></ProtectedRoute> } 
+          />
         </Routes>
       </main>
+
+      <Footer />
     </div>
   );
 }

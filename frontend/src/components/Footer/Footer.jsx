@@ -1,6 +1,7 @@
 // frontend/src/components/Footer/Footer.jsx
 import React from 'react';
-import Map from '../Map/Map'; // Importa nosso novo componente de mapa
+import Map from '../Map/Map';
+import ReviewForm from '../ReviewForm/ReviewForm';
 import './Footer.scss';
 
 const Footer = () => {
@@ -9,14 +10,16 @@ const Footer = () => {
       <div className="footer-content">
         <div className="address-section">
           <h3>Nossa Localização</h3>
-          
-          <p>R. Tamiarana, 218</p>
-          <p>São Francisco de Assis, Belford Roxo - RJ</p>
-          <p>CEP: 26125-720</p>
+          <p>Av. Floripes Rocha, 398</p>
+          <p>Centro, Belford Roxo - RJ</p>
+          <p>CEP: 26130-380</p>
         </div>
         <div className="map-section">
-          {/* Renderiza o componente de mapa aqui */}
           <Map />
+        </div>
+        {/* Adiciona a nova seção de avaliação */}
+        <div className="review-section">
+          <ReviewForm />
         </div>
       </div>
       <div className="footer-bottom">

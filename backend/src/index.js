@@ -14,6 +14,7 @@ const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const productRoutes = require('./routes/productRoutes');
 const portfolioRoutes = require('./routes/portfolioRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 const app = express();
 const prisma = new PrismaClient();
@@ -29,6 +30,7 @@ app.use('/api', authRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', productRoutes);
 app.use('/api', portfolioRoutes); 
+app.use('/api', reviewRoutes);
 
 // --- TAREFAS AGENDADAS (CRON JOBS) ---
 
@@ -82,6 +84,22 @@ cron.schedule('* * * * *', async () => {
 });
 
 // --- FIM DAS TAREFAS AGENDADAS ---
+
+// ... (depois do último app.use('/api', ...))
+
+// ROTA DE TESTE DE BANCO DE DADOS
+app.get('/api/db-test', async (req, res) => {
+  console.log('Iniciando teste de conexão com o banco...');
+  try {
+    // Tenta fazer a query mais simples possível: contar os usuários.
+    const userCount = await prisma.user.count(); 
+    console.log(`Teste bem-sucedido. Contagem de usuários: ${userCount}`);
+    res.status(200).json({ status: 'OK', users: userCount });
+  } catch (error) {
+    console.error('ERRO NO TESTE DE CONEXÃO COM O BANCO:', error);
+    res.status(500).json({ status: 'Erro na conexão', error: error.message });
+  }
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

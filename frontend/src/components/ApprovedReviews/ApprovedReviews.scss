@@ -1,0 +1,58 @@
+// frontend/src/components/ApprovedReviews/ApprovedReviews.scss
+.approved-reviews-container {
+  margin-top: 60px;
+  padding: 40px 0;
+  border-top: 1px solid var(--cor-borda);
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--cor-texto-principal);
+  }
+}
+
+// Estilo para cada slide, para dar espaçamento
+.review-slide {
+  padding: 0 10px;
+}
+
+.approved-review-card {
+  background-color: var(--cor-fundo-secundario);
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex !important; // !important para sobrescrever estilos do slick
+  flex-direction: column;
+  height: 220px; // Altura fixa para todos os cards ficarem iguais
+  box-shadow: 0 4px 10px var(--sombra-card);
+
+  .star-rating-display {
+    color: #ffc107;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+  }
+
+  .comment {
+    font-style: italic;
+    color: var(--cor-texto-secundario);
+    flex-grow: 1;
+    margin-bottom: 15px;
+    overflow: hidden; // Esconde texto que transborda
+  }
+
+  .customer-name {
+    font-weight: bold;
+    text-align: right;
+    color: var(--cor-texto-principal);
+  }
+}
+
+// Customização das "bolinhas" de navegação do carrossel
+.slick-dots li button:before {
+  font-size: 12px;
+  color: var(--cor-texto-secundario);
+}
+
+.slick-dots li.slick-active button:before {
+  color: var(--cor-destaque);
+}
