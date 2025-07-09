@@ -13,12 +13,12 @@
   }
 }
 
-// Estilo base para todos os campos de texto e textareas
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="number"],
 input[type="date"],
+input[type="tel"], // <-- Seletor para o campo de telefone
 textarea {
   width: 100%;
   padding: 12px;
@@ -42,7 +42,6 @@ textarea {
   min-height: 100px;
 }
 
-// Estilo base para botões de confirmação/ação principal
 .submit-button {
   width: 100%;
   padding: 15px;
@@ -62,11 +61,5 @@ textarea {
   &:disabled {
     background-color: #5a6268;
     cursor: not-allowed;
-  }
-}
-
-.dark-theme {
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
   }
 }

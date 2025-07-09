@@ -27,7 +27,7 @@ const Scheduler = () => {
   const [availableTimes, setAvailableTimes] = useState([]);
   const [selectedTime, setSelectedTime] = useState(null);
   const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerPhone, setCustomerPhone] = useState(''); // Estado para o número limpo (só dígitos)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -62,16 +62,22 @@ const Scheduler = () => {
   }, [selectedDate, selectedService]);
 
   const handleDateChange = (event) => {
+    setError('');
+    setSuccess('');
     const date = new Date(event.target.value.replace(/-/g, '/'));
     setSelectedDate(date);
   };
 
   const handleSelectService = (service) => {
+    setError('');
+    setSuccess('');
     setSelectedService(service);
     setCurrentStep(2);
   };
   
   const handleSelectTime = (time) => {
+    setError('');
+    setSuccess('');
     setSelectedTime(time);
     setCurrentStep(3);
   };
@@ -84,25 +90,53 @@ const Scheduler = () => {
     }
   };
 
+  // Lógica da Máscara Customizada
+  const handlePhoneChange = (e) => {
+    let cleanValue = e.target.value.replace(/\D/g, '');
+    if (cleanValue.length > 11) {
+      cleanValue = cleanValue.substring(0, 11);
+    }
+    setCustomerPhone(cleanValue);
+  };
+
+  const formatPhone = (value) => {
+    if (!value) return '';
+    const ddd = value.substring(0, 2);
+    const firstPart = value.substring(2, 7);
+    const secondPart = value.substring(7, 11);
+
+    if (value.length > 7) {
+      return `(${ddd}) ${firstPart}-${secondPart}`;
+    } else if (value.length > 2) {
+      return `(${ddd}) ${firstPart}`;
+    } else if (value.length > 0) {
+      return `(${ddd}`;
+    }
+    return value;
+  };
+  // Fim da Lógica da Máscara
+
   const handleSubmitBooking = async (event) => {
     event.preventDefault();
     setLoading(true);
     setError('');
     setSuccess('');
 
-    if (!selectedService || !selectedDate || !selectedTime || !customerName || !customerPhone) {
+    if (!selectedService || !selectedDate || !selectedTime || !customerName || customerPhone.length < 10) {
       setError('Por favor, preencha todos os campos para agendar.');
       setLoading(false);
       return;
     }
 
+    const fullPhoneNumber = `+55${customerPhone}`;
+    
     const [hour, minute] = selectedTime.split(':');
     const appointmentDate = new Date(selectedDate);
     appointmentDate.setHours(hour, minute, 0, 0);
 
     const appointmentData = {
       customerName,
-      customerPhone,
+      customerPhone: fullPhoneNumber,
       serviceId: selectedService.id,
       date: appointmentDate.toISOString(),
     };
@@ -111,19 +145,16 @@ const Scheduler = () => {
       await createAppointment(appointmentData);
       setSuccess('Agendamento realizado com sucesso! Você receberá uma confirmação e um lembrete no WhatsApp.');
       
-      setLoading(true);
-      getAvailability(selectedDate, selectedService.durationInMinutes)
-        .then(response => setAvailableTimes(response.data))
-        .catch(err => console.error("Falha ao recarregar horários", err))
-        .finally(() => setLoading(false));
-
+      setSelectedService(null);
       setSelectedTime(null);
       setCustomerName('');
       setCustomerPhone('');
-      setCurrentStep(2);
+      setSelectedDate(new Date());
+      setCurrentStep(1);
 
     } catch (err) {
       setError(err.response?.data?.message || 'Falha ao realizar o agendamento. Tente outro horário.');
+    } finally {
       setLoading(false);
     }
   };
@@ -223,8 +254,15 @@ const Scheduler = () => {
                   <input type="text" id="name" value={customerName} onChange={e => setCustomerName(e.target.value)} required />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="phone">Seu WhatsApp (com código do país e DDD)</label>
-                  <input type="text" id="phone" value={customerPhone} onChange={e => setCustomerPhone(e.target.value)} placeholder="+5521999999999" required />
+                  <label htmlFor="phone">Seu WhatsApp (apenas números)</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    value={formatPhone(customerPhone)}
+                    onChange={handlePhoneChange}
+                    placeholder="(21) 99999-9999"
+                    required
+                  />
                 </div>
                 <button type="submit" className="submit-button" disabled={loading}>
                   {loading ? 'Confirmando...' : 'Confirmar Agendamento'}

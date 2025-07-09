@@ -1,4 +1,3 @@
-// backend/src/controllers/availabilityController.js
 const { PrismaClient } = require('@prisma/client');
 const { startOfDay, endOfDay, setHours, setMinutes, setSeconds, addMinutes, format } = require('date-fns');
 const prisma = new PrismaClient();
@@ -10,7 +9,7 @@ const getAvailability = async (req, res) => {
     return res.status(400).json({ message: 'Data e duração do serviço são obrigatórias.' });
   }
 
-  const searchDate = new Date(date);
+  const searchDate = new Date(`${date}T00:00:00`);
   const duration = parseInt(serviceDuration, 10);
 
   try {
@@ -21,16 +20,14 @@ const getAvailability = async (req, res) => {
           lte: endOfDay(searchDate),
         },
       },
-      // A CORREÇÃO ESTÁ AQUI: Garantimos que os dados do serviço venham junto
       include: { 
         service: true,
       },
     });
-
+    
     const busySlots = new Set();
     appointments.forEach(app => {
       const startTime = new Date(app.date);
-      // Agora app.service nunca será nulo (a menos que haja dados corrompidos)
       const endTime = addMinutes(startTime, app.service.durationInMinutes);
       let currentTime = startTime;
       while (currentTime < endTime) {
@@ -68,10 +65,9 @@ const getAvailability = async (req, res) => {
         }
       }
     }
-
+    
     res.status(200).json(availableTimes);
   } catch (error) {
-    // Adiciona um log detalhado do erro no terminal do backend
     console.error("ERRO NO BACKEND AO CALCULAR DISPONIBILIDADE:", error);
     res.status(500).json({ message: 'Erro ao buscar disponibilidade', error: error.message });
   }
