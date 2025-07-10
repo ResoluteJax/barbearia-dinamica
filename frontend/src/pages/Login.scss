@@ -1,42 +1,76 @@
+// frontend/src/pages/Login.scss
+@use '../styles/variables' as *;
+
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 50px 20px;
+  position: relative; // Torna-se a referência para o posicionamento absoluto
+  min-height: 70vh;
+}
 
-  form {
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px var(--sombra-card);
-    width: 100%;
-    max-width: 400px;
-    background-color: var(--cor-fundo-secundario);
-  }
+.login-container form {
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px var(--sombra-card);
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--cor-fundo-secundario);
+}
 
-  h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: var(--cor-texto-principal);
-  }
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--cor-texto-principal);
+}
 
-  .form-group {
-    margin-bottom: 20px;
-  }
+.login-container p {
+  text-align: center;
+  margin-top: -15px;
+  margin-bottom: 20px;
+  color: var(--cor-texto-secundario);
+}
 
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: var(--cor-texto-principal);
-  }
+.forgot-password-link {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+  text-decoration: underline;
 
-  input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--cor-borda);
-    background-color: var(--cor-fundo-principal);
-    color: var(--cor-texto-principal);
-    border-radius: 4px;
-    box-sizing: border-box;
+  &:hover {
+    color: $azul-destaque;
   }
+}
+
+// --- ESTILOS PARA AS MENSAGENS FLUTUANTES ---
+.feedback-container {
+  position: absolute;
+  bottom: 20px; // Posição na base do container
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 400px; // Mesma largura do formulário
+  padding: 0 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.error-message, .success-message {
+  padding: 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.error-message {
+  background-color: rgba(220, 53, 69, 0.9);
+  color: white;
+}
+
+.success-message {
+  background-color: rgba(40, 167, 69, 0.9);
+  color: white;
 }

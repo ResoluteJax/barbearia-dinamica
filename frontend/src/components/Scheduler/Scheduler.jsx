@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getServices, getAvailability, createAppointment } from '../../services/api';
 import { format, isToday } from 'date-fns';
-import { FaCut, FaCalendarAlt, FaUserEdit, FaArrowLeft } from 'react-icons/fa';
+import { FaCut, FaCalendarAlt, FaUserEdit, FaArrowLeft, FaMugHot, FaPaintBrush } from 'react-icons/fa';
 import ApprovedReviews from '../ApprovedReviews/ApprovedReviews';
 import './Scheduler.scss';
 
@@ -19,6 +19,14 @@ const generateDayTimeSlots = () => {
 
 const allDaySlots = generateDayTimeSlots();
 
+// Função para escolher um ícone com base no nome do serviço
+const getServiceIcon = (serviceName) => {
+  const name = serviceName.toLowerCase();
+  if (name.includes('barba')) return <FaMugHot />;
+  if (name.includes('tinta') || name.includes('reflexo') || name.includes('nevou')) return <FaPaintBrush />;
+  return <FaCut />;
+};
+
 const Scheduler = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [services, setServices] = useState([]);
@@ -27,7 +35,7 @@ const Scheduler = () => {
   const [availableTimes, setAvailableTimes] = useState([]);
   const [selectedTime, setSelectedTime] = useState(null);
   const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState(''); // Estado para o número limpo (só dígitos)
+  const [customerPhone, setCustomerPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -90,7 +98,6 @@ const Scheduler = () => {
     }
   };
 
-  // Lógica da Máscara Customizada
   const handlePhoneChange = (e) => {
     let cleanValue = e.target.value.replace(/\D/g, '');
     if (cleanValue.length > 11) {
@@ -114,7 +121,6 @@ const Scheduler = () => {
     }
     return value;
   };
-  // Fim da Lógica da Máscara
 
   const handleSubmitBooking = async (event) => {
     event.preventDefault();
@@ -191,9 +197,21 @@ const Scheduler = () => {
               <h2>1. Escolha o Serviço</h2>
               <div className="services-list">
                 {services.map(service => (
-                  <button type="button" key={service.id} className={selectedService?.id === service.id ? 'selected' : ''} onClick={() => handleSelectService(service)}>
-                    {service.name} <span>({service.durationInMinutes} min) - R$ {Number(service.price).toFixed(2).replace('.',',')}</span>
-                  </button>
+                  <div 
+                    key={service.id} 
+                    className={`service-card ${selectedService?.id === service.id ? 'selected' : ''}`}
+                    onClick={() => handleSelectService(service)}
+                    tabIndex={0} // Para acessibilidade
+                    onKeyPress={(e) => e.key === 'Enter' && handleSelectService(service)}
+                  >
+                    <div className="service-icon">
+                      {getServiceIcon(service.name)}
+                    </div>
+                    <div className="service-details">
+                      <span className="service-name">{service.name}</span>
+                      <span className="service-meta">{service.durationInMinutes} min - R$ {Number(service.price).toFixed(2).replace('.',',')}</span>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -206,7 +224,7 @@ const Scheduler = () => {
                   <input type="date" id="date" value={format(selectedDate, 'yyyy-MM-dd')} onChange={handleDateChange} />
                 </div>
                 <div className="time-selector">
-                  <h3>Horários para {format(selectedDate, 'dd/MM/yyyy')}</h3>
+                  <h3>Horários para {selectedService ? selectedService.name : 'o serviço'} em {format(selectedDate, 'dd/MM/yyyy')}</h3>
                   {loading && !services.length ? <p>Carregando...</p> : loading ? <p>Buscando horários...</p> : (
                     <div className="time-slots">
                       {allDaySlots.map(time => {

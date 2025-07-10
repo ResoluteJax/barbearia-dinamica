@@ -8,6 +8,7 @@ import PortfolioPage from './pages/PortfolioPage';
 import Dashboard from './pages/Dashboard';
 import ManageProducts from './pages/admin/ManageProducts';
 import ManagePortfolio from './pages/admin/ManagePortfolio';
+import ChangePassword from './pages/admin/ChangePassword';
 import ManageReviews from './pages/admin/ManageReviews';
 import AddProduct from './pages/admin/AddProduct';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -49,6 +50,10 @@ function App() {
           <Route 
             path="/admin/reviews" 
             element={ <ProtectedRoute><ManageReviews /></ProtectedRoute> } 
+          />
+          <Route 
+            path="/admin/change-password" 
+            element={ <ProtectedRoute><ChangePassword /></ProtectedRoute> } 
           />
         </Routes>
       </main>

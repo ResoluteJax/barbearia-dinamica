@@ -1,4 +1,3 @@
-// backend/src/controllers/appointmentController.js
 const { PrismaClient } = require('@prisma/client');
 const { sendWhatsAppNotification } = require('../services/notificationService');
 const { format } = require('date-fns');
@@ -6,33 +5,26 @@ const prisma = new PrismaClient();
 
 const createAppointment = async (req, res) => {
   try {
-    console.log("1. Rota POST /appointments iniciada.");
     const { customerName, customerPhone, serviceId, date } = req.body;
 
     if (!customerName || !serviceId || !date) {
-      return res.status(400).json({ message: 'Dados insuficientes.' });
+      return res.status(400).json({ message: 'Dados insuficientes para o agendamento.' });
     }
 
     const appointmentDate = new Date(date);
 
-    /* --- VALIDAÇÃO TEMPORARIAMENTE DESATIVADA PARA TESTE ---
     if (appointmentDate < new Date()) {
       return res.status(400).json({ message: 'Não é possível agendar em uma data passada.' });
     }
-    */
 
-    console.log("2. Buscando por agendamentos existentes...");
     const existingAppointment = await prisma.appointment.findFirst({
       where: { date: appointmentDate },
     });
-    console.log("3. Busca por agendamentos existentes concluída.");
 
     if (existingAppointment) {
-      console.log("4. Horário já ocupado. Retornando erro 409.");
       return res.status(409).json({ message: 'Este horário já está ocupado.' });
     }
 
-    console.log("5. Criando novo agendamento no banco de dados...");
     const newAppointment = await prisma.appointment.create({
       data: {
         customerName,
@@ -44,15 +36,34 @@ const createAppointment = async (req, res) => {
         service: true,
       },
     });
-    console.log("6. Agendamento criado com sucesso no banco.");
 
-    /* --- LÓGICA DE NOTIFICAÇÃO DESATIVADA --- */
+    // --- LÓGICA DE NOTIFICAÇÃO (ATIVA) ---
+    try {
+      const formattedDate = format(newAppointment.date, "dd/MM/yyyy 'às' HH:mm");
+      
+      // 1. Notificação para o BARBEIRO
+      const barberNumber = process.env.BARBER_WHATSAPP_NUMBER;
+      if (barberNumber) {
+        const barberMessageBody = `*Novo Agendamento na D'Castro Barbearia!* 🔔\n\n*Cliente:* ${newAppointment.customerName}\n*WhatsApp:* ${newAppointment.customerPhone}\n*Serviço:* ${newAppointment.service.name}\n*Data:* ${formattedDate}`;
+        await sendWhatsAppNotification(barberNumber, barberMessageBody);
+      }
 
-    console.log("7. Enviando resposta 201 para o cliente.");
+      // 2. Notificação para o CLIENTE
+      const customerNumber = `whatsapp:${newAppointment.customerPhone}`;
+      const clientMessageBody = `Olá, ${newAppointment.customerName}! Seu agendamento na *D'Castro Barbearia* foi confirmado com sucesso. ✅\n\n*Serviço:* ${newAppointment.service.name}\n*Data:* ${formattedDate}\n\nAté lá!`;
+      await sendWhatsAppNotification(customerNumber, clientMessageBody);
+
+    } catch (notificationError) {
+      // O agendamento foi criado, mas a notificação falhou.
+      // Apenas registra o erro no console do servidor para não quebrar a experiência do usuário.
+      console.error('Agendamento criado, mas a notificação via WhatsApp falhou:', notificationError);
+    }
+    // --- FIM DA LÓGICA DE NOTIFICAÇÃO ---
+
     res.status(201).json(newAppointment);
 
   } catch (error) {
-    console.error('ERRO GERAL em createAppointment:', error);
+    console.error('Erro ao criar agendamento:', error);
     res.status(500).json({ message: 'Erro interno ao criar agendamento.', error: error.message });
   }
 };
@@ -60,6 +71,12 @@ const createAppointment = async (req, res) => {
 const getAllAppointments = async (req, res) => {
   try {
     const appointments = await prisma.appointment.findMany({
+      where: {
+        date: {
+          // Busca apenas agendamentos de agora em diante para o dashboard
+          gte: new Date(),
+        }
+      },
       orderBy: {
         date: 'asc',
       },
@@ -74,16 +91,34 @@ const getAllAppointments = async (req, res) => {
 };
 
 const deleteAppointment = async (req, res) => {
-  // O ID do usuário vem do middleware de proteção, garantindo que só o admin pode deletar
   const { id } = req.params; 
 
   try {
-    await prisma.appointment.delete({
+    // Primeiro, busca o agendamento para notificar o cliente do cancelamento (opcional)
+    const appointmentToCancel = await prisma.appointment.findUnique({
       where: { id },
     });
+
+    if (appointmentToCancel) {
+      await prisma.appointment.delete({
+        where: { id },
+      });
+
+      // Opcional: Enviar notificação de cancelamento para o cliente
+      try {
+        const customerNumber = `whatsapp:${appointmentToCancel.customerPhone}`;
+        const messageBody = `Olá, ${appointmentToCancel.customerName}. Informamos que seu agendamento na D'Castro Barbearia foi cancelado. Para reagendar, acesse nosso site.`;
+        await sendWhatsAppNotification(customerNumber, messageBody);
+      } catch (notificationError) {
+        console.error("Agendamento cancelado, mas notificação para o cliente falhou:", notificationError);
+      }
+    } else {
+      return res.status(404).json({ message: 'Agendamento não encontrado.' });
+    }
+
     res.status(204).send(); // Sucesso, sem conteúdo para retornar
   } catch (error) {
-    res.status(404).json({ message: 'Agendamento não encontrado.' });
+    res.status(500).json({ message: 'Erro ao cancelar o agendamento.' });
   }
 };
 

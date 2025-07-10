@@ -133,39 +133,52 @@ h2 {
 }
 
 .services-list {
+  display: flex;
   flex-direction: column;
-  button {
-    text-align: left;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    background-color: var(--cor-fundo-principal);
-    border: 1px solid var(--cor-borda);
-    color: var(--cor-texto-principal);
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: all 0.2s;
+  gap: 10px;
+}
 
-    span {
-      color: var(--cor-texto-secundario);
-    }
-    
-    &:hover:not(.selected) {
-      border-color: $azul-destaque;
-      background-color: var(--cor-fundo-principal);
-    }
-    
-    &.selected {
-      border-color: $azul-destaque;
-      background-color: color.adjust($azul-destaque, $lightness: 5%);
-      color: $branco;
-      font-weight: bold;
-      span { color: $branco; }
-    }
+.service-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: var(--cor-fundo-principal);
+  border: 1px solid var(--cor-borda);
+  border-left: 5px solid transparent; // Borda inicial transparente
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    border-left-color: $azul-destaque;
+    transform: translateX(5px);
   }
+
+  &.selected {
+    border-color: $azul-destaque;
+    background-color: rgba($azul-destaque, 0.1);
+  }
+}
+
+.service-icon {
+  font-size: 1.8rem;
+  color: $azul-destaque;
+}
+
+.service-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-name {
+  font-weight: bold;
+  color: var(--cor-texto-principal);
+}
+
+.service-meta {
+  font-size: 0.9rem;
+  color: var(--cor-texto-secundario);
 }
 
 .time-slots button {
@@ -234,4 +247,28 @@ h2 {
 .success-message {
   background-color: rgba(40, 167, 69, 0.1);
   color: #28a745;
+}
+
+.date-selector {
+  margin-bottom: 20px;
+  flex: 1;
+
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  input[type="date"] {
+    // Herda o estilo do _forms.scss
+    
+    // Regra específica para o ícone do calendário
+    .dark-theme &::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
+    .light-theme &::-webkit-calendar-picker-indicator {
+      filter: none;
+    }
+  }
 }

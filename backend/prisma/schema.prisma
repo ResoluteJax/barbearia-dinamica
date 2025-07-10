@@ -22,10 +22,14 @@ datasource db {
 
 // Modelo para o usuário do sistema (o barbeiro)
 model User {
-  id        String   @id @default(cuid()) // ID único no formato CUID
-  email     String   @unique // Email de login, deve ser único
+  id        String   @id @default(cuid())
+  email     String   @unique
   name      String
-  password  String   // ATENÇÃO: Armazenaremos a senha HASHED, nunca em texto puro
+  password  String
+
+  // Novo campo para forçar a troca de senha
+  mustChangePassword Boolean @default(true) 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

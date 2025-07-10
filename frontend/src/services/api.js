@@ -58,3 +58,12 @@ export const updateReviewStatus = (id, status) => apiClient.put(`/admin/reviews/
 export const getPendingReviewCount = () => {
   return apiClient.get('/admin/reviews/pending-count');
 };
+export const apiChangePassword = (passwordData) => {
+  return apiClient.put('/auth/change-password', passwordData);
+};
+export const requestPasswordReset = (data) => {
+  return apiClient.post('/auth/request-password-reset', data);
+};
+export const resetPasswordWithToken = (data) => {
+  return apiClient.post('/auth/reset-password-with-token', data);
+}
